@@ -1,0 +1,17 @@
+{
+  "token": "MTM0MDc2NzM4MTA3MjUxNTE0Ng.GkdtRZ.g5ADVpnaZO5Ba4XQvT0lnlCSnHG0-r9G3aRDGY",
+  "prefix": ".",
+  "remote-users": [],
+  "autoreply": {
+    "messages": ["https://discord.gg/bSCxtMm3kv"],
+    "channels": [],
+    "users": []
+  },
+  "afk": {
+    "enabled": false,
+    "message": "AFK"
+  },
+  "copycat": {
+    "users": []
+  }
+}
