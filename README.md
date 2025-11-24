@@ -6,42 +6,15 @@
 ![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Nginx](https://img.shields.io/badge/Nginx-1.27-009639?style=for-the-badge&logo=nginx&logoColor=white)
-![pgAdmin](https://img.shields.io/badge/pgAdmin-4-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![pgAdmin](https://img.shields.io/badge/pgAdmin-4-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 
 [![License](https://img.shields.io/badge/License-Private-red?style=for-the-badge)](LICENSE)
 ![Maintenance](https://img.shields.io/badge/Maintained-Yes-green?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/teowaep/docker-spn-template?style=for-the-badge)
-
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=for-the-badge)
 
 </div>
 
 Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Docker, Nginx et PostgreSQL.
-
-## 📑 Table des matières
-
-- [📦 Stack technique](#-stack-technique)
-- [🎯 Fonctionnalités](#-fonctionnalités)
-- [📋 Prérequis](#-prérequis)
-- [🚀 Installation rapide](#-installation-rapide)
-- [🏗️ Architecture du projet](#️-architecture-du-projet)
-- [🛠️ Commandes utiles](#️-commandes-utiles)
-- [🔨 Makefile](#-utiliser-le-makefile-raccourcis-pratiques)
-- [📝 Workflow de développement typique](#-workflow-de-développement-typique)
-- [⚙️ Configuration](#️-configuration)
-- [🗄️ pgAdmin - Interface web pour PostgreSQ](#️-pgadmin---interface-web-pour-postgresql)
-- [🐛 Debugging avec Xdebug](#-debugging-avec-xdebug)
-- [🆘 Troubleshooting](#-troubleshooting)
-- [🎨 Personnalisation](#-personnalisation)
-- [🔒 Sécurité](#-sécurité)
-- [📚 Ressources utiles](#-ressources-utiles)
-- [🤝 Contribution](#-contribution)
-- [📝 Changelog](#-changelog)
-- [📄 License](#-license)
-- [🎉 Bon développement !](#-bon-développement-)
-
----
 
 ## 📦 Stack technique
 
@@ -83,7 +56,7 @@ Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Dock
 ### 1️⃣ Cloner le template
 
 ```bash
-git clone https://github.com/teowaep/docker-spn-template.git mon-nouveau-projet
+git clone git@github.com:ton-user/docker-spn-template.git mon-nouveau-projet
 cd mon-nouveau-projet
 ```
 
@@ -130,13 +103,22 @@ docker-compose build backend-php
 
 **Option A : Version complète (webapp) - Recommandé**
 ```bash
-docker-compose run --rm backend-php symfony new . --webapp
+docker-compose run --rm backend-php bash -c "composer create-project symfony/skeleton:7.2.* temp && cd temp && composer require webapp && cd .. && cp -r temp/* . && cp temp/.env . && rm -rf temp"
 ```
 
 **Option B : Version minimale (skeleton)**
 ```bash
-docker-compose run --rm backend-php symfony new . --skeleton
+docker-compose run --rm backend-php bash -c "composer create-project symfony/skeleton:7.2.* temp && cp -r temp/* . && cp temp/.env . && rm -rf temp"
 ```
+
+**Ou encore plus simple avec le Makefile :**
+```bash
+make init-symfony-webapp
+# ou
+make init-symfony-skeleton
+```
+
+💡 **Note :** On installe Symfony dans un dossier temporaire (`temp`) puis on copie les fichiers à la racine car `symfony new` refuse de s'installer dans un dossier non vide (qui contient déjà les fichiers Docker du template).
 
 ### 6️⃣ Démarrer les containers
 
@@ -164,7 +146,11 @@ Tu devrais voir la page d'accueil Symfony ! 🎉
 
 **💡 Astuce :** Pour gagner du temps, utilise le Makefile ! Au lieu de toutes ces étapes, tu peux faire :
 ```bash
-make first-install    # Installation complète automatique
+# Installation webapp complète
+make first-install-webapp
+
+# OU installation skeleton complète
+make first-install-skeleton
 ```
 
 Ou si tu as déjà Symfony installé :
@@ -175,29 +161,10 @@ make setup           # Build + up + composer install + db create + migrate
 ---
 
 ## 🏗️ Architecture du projet
-```
-┌─────────────┐
-│  Navigateur │
-└──────┬──────┘
-       │
-   Port 8080
-       │
-┌──────▼──────┐
-│    Nginx    │
-└──────┬──────┘
-       │
-   Port 9000
-       │
-┌──────▼──────┐     Port 5432    ┌────────────┐
-│   PHP-FPM   │◄────────────────►│ PostgreSQL │
-└─────────────┘                  └────────────┘
-```
-
 
 ### Structure initiale (avant installation Symfony)
 ```
 docker-spn-template/
-├── assets/
 ├── docker/
 │   ├── nginx/
 │   │   └── default.conf      # Configuration Nginx
@@ -215,7 +182,6 @@ docker-spn-template/
 ### Structure après installation Symfony
 ```
 mon-projet/
-├── assets/
 ├── bin/                       # Binaires Symfony
 ├── config/                    # Configuration Symfony
 ├── docker/                    # Configuration Docker
@@ -373,10 +339,11 @@ make test-coverage   # Tests avec couverture de code
 <summary>🚀 Installation (4 commandes)</summary>
 
 ```bash
-make init-symfony           # Installer Symfony webapp
-make init-symfony-minimal   # Installer Symfony skeleton
-make first-install          # Première installation complète (tout automatique)
-make setup                  # Setup après avoir installé Symfony manuellement
+make init-symfony-webapp      # Installer Symfony webapp
+make init-symfony-skeleton    # Installer Symfony skeleton
+make first-install-webapp     # Première installation webapp complète (tout automatique)
+make first-install-skeleton   # Première installation skeleton complète (tout automatique)
+make setup                    # Setup après avoir installé Symfony manuellement
 ```
 </details>
 
