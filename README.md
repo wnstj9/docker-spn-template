@@ -16,10 +16,12 @@
 
 Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Docker, Nginx et PostgreSQL.
 
+**Symfony 7 skeleton déjà installé** - Clone, configure et démarre en 3 commandes !
+
 ## 📦 Stack technique
 
 - **PHP** 8.4-FPM avec Xdebug
-- **Symfony** 7.2+ (à installer après clonage)
+- **Symfony** 7 skeleton (déjà installé !)
 - **PostgreSQL** 18
 - **pgAdmin** 4 (interface web pour PostgreSQL)
 - **Nginx** 1.27+
@@ -30,6 +32,7 @@ Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Dock
 
 ## 🎯 Fonctionnalités
 
+✅ **Symfony 7 skeleton déjà installé** - Clone et démarre !  
 ✅ Configuration Docker optimisée  
 ✅ Nginx configuré comme reverse proxy  
 ✅ PostgreSQL 18 avec persistence des données  
@@ -39,7 +42,8 @@ Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Dock
 ✅ Health checks intégrés sur tous les services  
 ✅ Variables d'environnement sécurisées  
 ✅ Symfony CLI pré-installé  
-✅ Template vide et flexible (choix webapp/skeleton)
+✅ Upgrade en webapp (site web) en 1 commande  
+✅ Upgrade en API (API Platform) en 1 commande
 
 ---
 
@@ -53,184 +57,164 @@ Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Dock
 
 ## 🚀 Installation rapide
 
-### 1️⃣ Cloner le template
+> 💡 **Ce template contient déjà Symfony 7 skeleton installé !** Tu n'as qu'à cloner, configurer et démarrer.
+
+### ⚡ Installation avec Make (Recommandé)
+
+**La méthode la plus rapide - 3 commandes :**
 
 ```bash
-git clone https://github.com/teowaep/docker-spn-template.git mon-nouveau-projet
-cd mon-nouveau-projet
+# 1. Cloner le template
+git clone https://github.com/teowaep/docker-spn-template.git mon-projet
+cd mon-projet
+
+# 2. Configurer l'environnement
+cp .env.example .env
+nano .env  # Remplis POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+
+# 3. Démarrer tout !
+make setup
 ```
 
-### 2️⃣ Supprimer l'historique Git du template
+**C'est tout ! 🎉** Ton projet est prêt à **http://localhost:8080**
+
+### 🔧 Installation classique (Sans Make)
+
+**Si tu n'as pas Make installé :**
 
 ```bash
+# 1. Cloner le template
+git clone https://github.com/teowaep/docker-spn-template.git mon-projet
+cd mon-projet
+
+# 2. Supprimer l'historique Git du template
 rm -rf .git
 git init
-```
 
-### 3️⃣ Configurer l'environnement
-
-```bash
-# Copier le fichier d'exemple
+# 3. Configurer l'environnement
 cp .env.example .env
+nano .env  # Remplis POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
 
-# Éditer .env avec tes valeurs
-nano .env
+# 4. Ajuster DATABASE_URL dans .env
+# Remplace cette ligne :
+# DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
+# Par :
+# DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@backend-postgres:${POSTGRES_PORT}/${POSTGRES_DB}?serverVersion=18&charset=utf8"
+
+# 5. Build et démarrer les containers
+docker-compose build
+docker-compose up -d
+
+# 6. Corriger les permissions
+docker-compose exec backend-php chmod -R 777 var/
+
+# 7. Installer les dépendances
+docker-compose exec backend-php composer install
+
+# 8. Créer la base de données (nécessite Doctrine - voir ci-dessous)
+docker-compose exec backend-php bash
+composer require symfony/orm-pack
+symfony console doctrine:database:create
+exit
 ```
 
-**Variables importantes à configurer dans `.env` :**
+**Ton projet est prêt !** Ouvre **http://localhost:8080** 🎉
+
+---
+
+### 🎯 Variables .env importantes
+
 ```env
+# Symfony
 APP_ENV=dev
-APP_SECRET=genere-un-secret-fort-32-caracteres-minimum
+APP_SECRET=genere-un-secret-avec-openssl-rand-hex-32
 
+# PostgreSQL (pour Docker)
 POSTGRES_DB=mon_projet_db
-POSTGRES_USER=ton_user
-POSTGRES_PASSWORD=ton_password_securise
+POSTGRES_USER=mon_user
+POSTGRES_PASSWORD=mon_password_securise
 POSTGRES_PORT=5432
+
+# Database URL (pour Symfony)
+DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@backend-postgres:${POSTGRES_PORT}/${POSTGRES_DB}?serverVersion=18&charset=utf8"
 ```
 
-💡 **Générer un APP_SECRET sécurisé :**
+💡 **Générer APP_SECRET :**
 ```bash
 openssl rand -hex 32
 ```
 
-### 4️⃣ Build de l'image PHP
+---
 
+### 📦 Choisir ta stack (Optionnel)
+
+Le template contient **Symfony skeleton** (version minimale). Tu peux l'upgrader selon tes besoins :
+
+#### Option 1 : Webapp (Site web classique)
+
+**Avec Make :**
 ```bash
-docker-compose build backend-php
+make upgrade-webapp
 ```
 
-### 5️⃣ Installer Symfony
-
-**Option A : Version complète (webapp) - Recommandé**
+**Sans Make :**
 ```bash
-docker-compose run --rm backend-php bash -c "composer create-project symfony/skeleton:7.* temp && cd temp && composer require webapp && cd .. && cp -r temp/* . && cp temp/.env . && rm -rf temp"
+docker-compose exec backend-php composer require webapp
 ```
 
-**Option B : Version minimale (skeleton)**
+**Inclut :** Twig, Doctrine, Formulaires, Sécurité, Asset Mapper
+
+---
+
+#### Option 2 : API (API REST)
+
+**Avec Make :**
 ```bash
-docker-compose run --rm backend-php bash -c "composer create-project symfony/skeleton:7.* temp && cp -r temp/* . && cp temp/.env . && rm -rf temp"
+make upgrade-api
 ```
 
-**Ou encore plus simple avec le Makefile :**
+**Sans Make :**
 ```bash
-make init-symfony-webapp
+docker-compose exec backend-php composer require api
+```
+
+**Inclut :** API Platform, Doctrine, Serializer, Validation
+
+Documentation API disponible à : **http://localhost:8080/api**
+
+---
+
+**Différences skeleton / webapp / api :**
+
+| Fonctionnalité        | Skeleton (inclus) | Webapp | API |
+| --------------------- | ----------------- | ------ | --- |
+| Framework de base     | ✅                 | ✅      | ✅   |
+| Twig (templates)      | ❌                 | ✅      | ❌   |
+| Doctrine (ORM)        | ❌                 | ✅      | ✅   |
+| Formulaires           | ❌                 | ✅      | ❌   |
+| Sécurité              | ❌                 | ✅      | ✅   |
+| Asset Mapper          | ❌                 | ✅      | ❌   |
+| API Platform          | ❌                 | ❌      | ✅   |
+| Documentation OpenAPI | ❌                 | ❌      | ✅   |
+
+---
+
+### 📝 Commandes utiles après installation
+
+```bash
+# Entrer dans le container PHP
+make bash
 # ou
-make init-symfony-skeleton
-```
-
-💡 **Note :** On installe la dernière version de Symfony 7 (`7.*`) qui inclut tous les correctifs de sécurité. On utilise un dossier temporaire (`temp`) car `symfony new` refuse de s'installer dans un dossier non vide.
-
-⚠️ **IMPORTANT - Différence webapp vs skeleton :**
-
-| Fonctionnalité | Webapp ✅ | Skeleton ❌ |
-|----------------|----------|------------|
-| Twig (templates) | Inclus | À installer |
-| **Doctrine (ORM)** | **Inclus** | **À installer** |
-| Formulaires | Inclus | À installer |
-| Sécurité | Inclus | À installer |
-| Validation | Inclus | À installer |
-
-**Si tu choisis skeleton**, tu devras installer Doctrine manuellement :
-```bash
-docker-compose exec backend-php bash
-composer require symfony/orm-pack
-# Maintenant tu peux créer la DB
-symfony console doctrine:database:create
-```
-
-### 6️⃣ Démarrer les containers
-
-```bash
-docker-compose up -d
-```
-
-### 7️⃣ Créer la base de données
-
-**Si tu as installé webapp (Doctrine inclus) :**
-```bash
-# Entrer dans le container
 docker-compose exec backend-php bash
 
-# Créer la DB
-symfony console doctrine:database:create
-```
+# Créer une entité (nécessite Doctrine/webapp)
+make entity name=Article
 
-**Si tu as installé skeleton (sans Doctrine) :**
-```bash
-# Entrer dans le container
-docker-compose exec backend-php bash
+# Voir les logs
+make logs-php
 
-# Installer Doctrine d'abord
-composer require symfony/orm-pack
-
-# Puis créer la DB
-symfony console doctrine:database:create
-```
-
-**Ou avec le Makefile (webapp uniquement) :**
-```bash
-make db-create
-```
-
-### 8️⃣ Vérifier l'installation
-
-Ouvre ton navigateur : **http://localhost:8080**
-
-Tu devrais voir la page d'accueil Symfony ! 🎉
-
----
-
-**💡 Astuce :** Pour gagner du temps, utilise le Makefile ! Au lieu de toutes ces étapes, tu peux faire :
-```bash
-# Installation webapp complète
-make first-install-webapp
-
-# OU installation skeleton complète
-make first-install-skeleton
-```
-
-Ou si tu as déjà Symfony installé :
-```bash
-make setup           # Build + up + composer install + db create + migrate
-```
-
----
-
-## 🏗️ Architecture du projet
-
-### Structure initiale (avant installation Symfony)
-```
-docker-spn-template/
-├── docker/
-│   ├── nginx/
-│   │   └── default.conf      # Configuration Nginx
-│   └── php/
-│       └── Dockerfile.dev     # Image PHP personnalisée
-├── .dockerignore              # Fichiers exclus du build
-├── .env                       # Variables d'environnement (local, ignoré par Git)
-├── .env.example               # Template des variables
-├── .gitignore                 # Fichiers ignorés par Git
-├── docker-compose.yml         # Orchestration des services
-├── Makefile                   # Raccourcis pour les commandes Docker/Symfony
-└── README.md                  # Documentation
-```
-
-### Structure après installation Symfony
-```
-mon-projet/
-├── bin/                       # Binaires Symfony
-├── config/                    # Configuration Symfony
-├── docker/                    # Configuration Docker
-├── migrations/                # Migrations Doctrine
-├── public/                    # Point d'entrée web
-├── src/                       # Code source
-├── templates/                 # Templates Twig
-├── var/                       # Cache et logs
-├── vendor/                    # Dépendances Composer
-├── .env                       # Configuration locale
-├── composer.json
-├── docker-compose.yml
-└── symfony.lock
+# Arrêter les containers
+make down
 ```
 
 ---

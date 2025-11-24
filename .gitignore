@@ -1,6 +1,4 @@
-# ===========================================
-# Symfony Framework
-# ===========================================
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -10,75 +8,3 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-# ===========================================
-# PHPUnit
-# ===========================================
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
-
-###> symfony/phpunit-bridge ###
-.phpunit
-.phpunit.result.cache
-###< symfony/phpunit-bridge ###
-
-# ===========================================
-# IDE & Editeurs
-# ===========================================
-.idea/
-.vscode/
-*.sublime-project
-*.sublime-workspace
-
-# ===========================================
-# OS
-# ===========================================
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-*~
-
-# ===========================================
-# Logs
-# ===========================================
-*.log
-logs/
-
-# ===========================================
-# Fichiers de sauvegarde
-# ===========================================
-*.bak
-*.backup
-*.swp
-*.swo
-*.old
-
-# ===========================================
-# Docker (données locales)
-# ===========================================
-*.sql
-*.dump
-
-# ===========================================
-# Uploads
-# ===========================================
-/public/uploads/*
-!/public/uploads/.gitkeep
-
-# ===========================================
-# Cache d'outils
-# ===========================================
-.php-cs-fixer.cache
-.phpstan.cache
-.psalm.cache
-
-# ===========================================
-# Composer
-# ===========================================
-composer.phar

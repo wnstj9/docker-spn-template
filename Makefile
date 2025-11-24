@@ -12,13 +12,13 @@ NGINX_CONTAINER = backend-nginx
 PGADMIN_CONTAINER = pgadmin
 
 ## —— 🐳 Docker ————————————————————————————————————————————————————————————
-up: ## Demarrer tous les containers
+up: ## Démarrer tous les containers
 	$(DOCKER_COMPOSE) up -d
 
 down: ## Arrêter tous les containers
 	$(DOCKER_COMPOSE) down
 
-restart: ## Redemarrer tous les containers
+restart: ## Redémarrer tous les containers
 	$(DOCKER_COMPOSE) restart
 
 build: ## Construire/reconstruire les images
@@ -27,7 +27,7 @@ build: ## Construire/reconstruire les images
 rebuild: ## Reconstruire complètement (sans cache)
 	$(DOCKER_COMPOSE) build --no-cache
 
-ps: ## Voir l'etat des containers
+ps: ## Voir l'état des containers
 	$(DOCKER_COMPOSE) ps
 
 logs: ## Voir tous les logs (Ctrl+C pour quitter)
@@ -52,7 +52,7 @@ stop: ## Arrêter les containers (alias de down)
 bash: ## Entrer dans le container PHP
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) bash
 
-db-shell: ## Acceder au shell PostgreSQL
+db-shell: ## Accéder au shell PostgreSQL
 	$(DOCKER_COMPOSE) exec $(DB_CONTAINER) psql -U $$(grep POSTGRES_USER .env | cut -d '=' -f2) -d $$(grep POSTGRES_DB .env | cut -d '=' -f2)
 
 pgadmin: ## Ouvrir pgAdmin dans le navigateur
@@ -147,67 +147,28 @@ test-coverage: ## Tests avec couverture de code
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) php bin/phpunit --coverage-html var/coverage
 
 ## —— 🚀 Installation ——————————————————————————————————————————————————————
-init-symfony-webapp: ## Installer Symfony webapp
-	@echo "==> Installation de Symfony webapp..."
-	@if [ -f .env ]; then \
-		echo "==> Sauvegarde du .env existant..."; \
-		cp .env .env.docker.backup; \
-	fi
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.* temp && cd temp && composer require webapp && cd .. && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
-	@if [ -f .env.docker.backup ]; then \
-		echo "==> Fusion du .env Docker avec le .env Symfony..."; \
-		echo "" >> .env; \
-		echo "###> Docker Variables ###" >> .env; \
-		grep "POSTGRES_" .env.docker.backup >> .env 2>/dev/null || true; \
-		rm .env.docker.backup; \
-	fi
-	@echo "==> Symfony webapp installe !"
-	@echo "==> Correction des permissions..."
-	$(MAKE) up
-	$(MAKE) fix-perms
-
-init-symfony-skeleton: ## Installer Symfony skeleton
-	@echo "==> Installation de Symfony skeleton..."
-	@if [ -f .env ]; then \
-		echo "==> Sauvegarde du .env existant..."; \
-		cp .env .env.docker.backup; \
-	fi
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.* temp && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
-	@if [ -f .env.docker.backup ]; then \
-		echo "==> Fusion du .env Docker avec le .env Symfony..."; \
-		echo "" >> .env; \
-		echo "###> Docker Variables ###" >> .env; \
-		grep "POSTGRES_" .env.docker.backup >> .env 2>/dev/null || true; \
-		rm .env.docker.backup; \
-	fi
-	@echo "==> Symfony skeleton installe !"
-	@echo "==> Correction des permissions..."
-	$(MAKE) up
-	$(MAKE) fix-perms
-
-setup: build up composer-install db-create db-migrate fix-perms ## Installation complète du projet (après avoir installe Symfony)
+setup: build up fix-perms composer-install ## Installation complete du projet (Symfony deja installe)
 	@echo ""
 	@echo "==> Installation terminee !"
-	@echo "==> N'oublie pas de configurer .env"
 	@echo "==> Application: http://localhost:8080"
 	@echo "==> pgAdmin: http://localhost:5050"
-
-first-install-webapp: build init-symfony-webapp up composer-install db-create fix-perms ## Première installation webapp (clone + Symfony)
 	@echo ""
-	@echo "==> Symfony webapp installe et containers demarres !"
-	@echo "==> edite .env avec tes valeurs"
-	@echo "==> Ensuite lance: make db-migrate"
-	@echo "==> Application: http://localhost:8080"
-	@echo "==> pgAdmin: http://localhost:5050"
+	@echo "==> Pour creer la DB (necessite Doctrine) :"
+	@echo "    make upgrade-webapp    # Installe Doctrine + autres packages"
+	@echo "    make db-create         # Cree la base de donnees"
 
-first-install-skeleton: build init-symfony-skeleton up composer-install fix-perms ## Première installation skeleton (clone + Symfony)
-	@echo ""
-	@echo "==> Symfony skeleton installe et containers demarres !"
-	@echo "==> edite .env avec tes valeurs"
-	@echo "==> ATTENTION: Pour installer Doctrine: composer require symfony/orm-pack"
-	@echo "==> Ensuite lance: make db-migrate"
-	@echo "==> Application: http://localhost:8080"
-	@echo "==> pgAdmin: http://localhost:5050"
+upgrade-webapp: ## Passer de skeleton a webapp (installe Doctrine, Twig, etc.)
+	@echo "==> Installation du pack webapp..."
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) composer require webapp
+	@echo "==> Pack webapp installe !"
+	@echo "==> Tu peux maintenant creer la DB : make db-create"
+
+upgrade-api: ## Passer de skeleton a API (installe API Platform)
+	@echo "==> Installation d'API Platform..."
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) composer require api
+	@echo "==> API Platform installe !"
+	@echo "==> Documentation API disponible a : http://localhost:8080/api"
+	@echo "==> Tu peux maintenant creer la DB : make db-create"
 
 ## —— 🔧 Utilitaires ———————————————————————————————————————————————————————
 fix-perms: ## Corriger les permissions des fichiers
