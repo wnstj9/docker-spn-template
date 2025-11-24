@@ -19,6 +19,30 @@
 
 Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Docker, Nginx et PostgreSQL.
 
+## 📑 Table des matières
+
+- [📦 Stack technique](#-stack-technique)
+- [🎯 Fonctionnalités](#-fonctionnalités)
+- [📋 Prérequis](#-prérequis)
+- [🚀 Installation rapide](#-installation-rapide)
+- [🏗️ Architecture du projet](#️-architecture-du-projet)
+- [🛠️ Commandes utiles](#️-commandes-utiles)
+- [🔨 Makefile](#-utiliser-le-makefile-raccourcis-pratiques)
+- [📝 Workflow de développement typique](#-workflow-de-développement-typique)
+- [⚙️ Configuration](#️-configuration)
+- [🗄️ pgAdmin - Interface web pour PostgreSQ](#️-pgadmin---interface-web-pour-postgresql)
+- [🐛 Debugging avec Xdebug](#-debugging-avec-xdebug)
+- [🆘 Troubleshooting](#-troubleshooting)
+- [🎨 Personnalisation](#-personnalisation)
+- [🔒 Sécurité](#-sécurité)
+- [📚 Ressources utiles](#-ressources-utiles)
+- [🤝 Contribution](#-contribution)
+- [📝 Changelog](#-changelog)
+- [📄 License](#-license)
+- [🎉 Bon développement !](#-bon-développement-)
+
+---
+
 ## 📦 Stack technique
 
 - **PHP** 8.4-FPM avec Xdebug
@@ -151,6 +175,24 @@ make setup           # Build + up + composer install + db create + migrate
 ---
 
 ## 🏗️ Architecture du projet
+```
+┌─────────────┐
+│  Navigateur │
+└──────┬──────┘
+       │
+   Port 8080
+       │
+┌──────▼──────┐
+│    Nginx    │
+└──────┬──────┘
+       │
+   Port 9000
+       │
+┌──────▼──────┐     Port 5432    ┌────────────┐
+│   PHP-FPM   │◄────────────────►│ PostgreSQL │
+└─────────────┘                   └────────────┘
+```
+
 
 ### Structure initiale (avant installation Symfony)
 ```
