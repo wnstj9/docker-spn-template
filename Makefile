@@ -147,11 +147,15 @@ test-coverage: ## Tests avec couverture de code
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) php bin/phpunit --coverage-html var/coverage
 
 ## —— 🚀 Installation ——————————————————————————————————————————————————————
-init-symfony-webapp: ## Installer Symfony (webapp)
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) symfony new . --webapp
+init-symfony-webapp: ## Installer Symfony webapp
+	@echo "📦 Installation de Symfony webapp..."
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.2.* temp && cd temp && composer require webapp && cd .. && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
+	@echo "✅ Symfony webapp installé !"
 
-init-symfony-skeleton: ## Installer Symfony (skeleton)
-	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) symfony new . --skeleton
+init-symfony-skeleton: ## Installer Symfony skeleton
+	@echo "📦 Installation de Symfony skeleton..."
+	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.2.* temp && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
+	@echo "✅ Symfony skeleton installé !"
 
 setup: build up composer-install db-create db-migrate ## Installation complète du projet (après avoir installé Symfony)
 	@echo ""
@@ -160,17 +164,17 @@ setup: build up composer-install db-create db-migrate ## Installation complète 
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-webapp: build init-symfony-webapp up composer-install db-create ## Première installation (clone + Symfony)
+first-install-webapp: build init-symfony-webapp up composer-install db-create ## Première installation webapp (clone + Symfony)
 	@echo ""
-	@echo "✅ Symfony installé et containers démarrés !"
+	@echo "✅ Symfony webapp installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
 	@echo "🚀 Ensuite lance: make db-migrate"
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-skeleton: build init-symfony-skeleton up composer-install db-create ## Première installation (clone + Symfony)
+first-install-skeleton: build init-symfony-skeleton up composer-install db-create ## Première installation skeleton (clone + Symfony)
 	@echo ""
-	@echo "✅ Symfony installé et containers démarrés !"
+	@echo "✅ Symfony skeleton installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
 	@echo "🚀 Ensuite lance: make db-migrate"
 	@echo "🌐 Application: http://localhost:8080"
