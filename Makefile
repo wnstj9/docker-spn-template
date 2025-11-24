@@ -157,14 +157,14 @@ init-symfony-skeleton: ## Installer Symfony skeleton
 	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.* temp && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
 	@echo "✅ Symfony skeleton installé !"
 
-setup: build up composer-install db-create db-migrate ## Installation complète du projet (après avoir installé Symfony)
+setup: build up composer-install db-create db-migrate fix-perm ## Installation complète du projet (après avoir installé Symfony)
 	@echo ""
 	@echo "✅ Installation terminée !"
 	@echo "📝 N'oublie pas de configurer .env"
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-webapp: build init-symfony-webapp up composer-install db-create ## Première installation webapp (clone + Symfony)
+first-install-webapp: build init-symfony-webapp up composer-install db-create fix-perm ## Première installation webapp (clone + Symfony)
 	@echo ""
 	@echo "✅ Symfony webapp installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
@@ -172,7 +172,7 @@ first-install-webapp: build init-symfony-webapp up composer-install db-create ##
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-skeleton: build init-symfony-skeleton up composer-install db-create ## Première installation skeleton (clone + Symfony)
+first-install-skeleton: build init-symfony-skeleton up composer-install db-create fix-perm ## Première installation skeleton (clone + Symfony)
 	@echo ""
 	@echo "✅ Symfony skeleton installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
@@ -182,8 +182,8 @@ first-install-skeleton: build init-symfony-skeleton up composer-install db-creat
 
 ## —— 🔧 Utilitaires ———————————————————————————————————————————————————————
 fix-perms: ## Corriger les permissions des fichiers
-	sudo chown -R $(USER):$(USER) .
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chown -R www-data:www-data var/
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chmod -R 775 var/
 
 clear-cache: ## Supprimer tout le cache (fichiers)
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) rm -rf var/cache/*
