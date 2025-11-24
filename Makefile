@@ -183,7 +183,7 @@ first-install-skeleton: build init-symfony-skeleton up composer-install db-creat
 ## —— 🔧 Utilitaires ———————————————————————————————————————————————————————
 fix-perms: ## Corriger les permissions des fichiers
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chown -R www-data:www-data var/
-	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chmod -R 775 var/
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chmod -R 777 var/
 
 clear-cache: ## Supprimer tout le cache (fichiers)
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) rm -rf var/cache/*
