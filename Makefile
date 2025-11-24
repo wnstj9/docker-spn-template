@@ -48,7 +48,7 @@ clean: ## Arrêter et supprimer containers + volumes + images
 stop: ## Arrêter les containers (alias de down)
 	$(DOCKER_COMPOSE) down
 
-## —— ==> Accès ——————————————————————————————————————————————————————————————
+## —— 🔧 Accès ——————————————————————————————————————————————————————————————
 bash: ## Entrer dans le container PHP
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) bash
 
@@ -107,7 +107,7 @@ composer-remove: ## Supprimer un package (usage: make composer-remove package=sy
 composer-dump: ## Regenerer l'autoload
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) composer dump-autoload
 
-## —— ==> Base de donnees ——————————————————————————————————————————————————
+## —— 🗄️ Base de donnees ——————————————————————————————————————————————————
 db-create: ## Creer la base de donnees
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) symfony console doctrine:database:create --if-not-exists
 
@@ -146,7 +146,7 @@ test: ## Executer les tests PHPUnit
 test-coverage: ## Tests avec couverture de code
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) php bin/phpunit --coverage-html var/coverage
 
-## —— ==> Installation ——————————————————————————————————————————————————————
+## —— 🚀 Installation ——————————————————————————————————————————————————————
 init-symfony-webapp: ## Installer Symfony webapp
 	@echo "📦 Installation de Symfony webapp..."
 	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.* temp && cd temp && composer require webapp && cd .. && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
@@ -184,7 +184,7 @@ first-install-skeleton: build init-symfony-skeleton up composer-install fix-perm
 	@echo "==> Application: http://localhost:8080"
 	@echo "==> pgAdmin: http://localhost:5050"
 
-## —— ==> Utilitaires ———————————————————————————————————————————————————————
+## —— 🔧 Utilitaires ———————————————————————————————————————————————————————
 fix-perms: ## Corriger les permissions des fichiers
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chown -R www-data:www-data var/
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chmod -R 777 var/
