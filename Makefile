@@ -176,7 +176,7 @@ first-install-webapp: build init-symfony-webapp up composer-install db-create fi
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-skeleton: build init-symfony-skeleton up composer-install db-create fix-perms ## Première installation skeleton (clone + Symfony)
+first-install-skeleton: build init-symfony-skeleton up composer-install fix-perms ## Première installation skeleton (clone + Symfony)
 	@echo ""
 	@echo "✅ Symfony skeleton installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
