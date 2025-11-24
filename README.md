@@ -130,12 +130,12 @@ docker-compose build backend-php
 
 **Option A : Version complète (webapp) - Recommandé**
 ```bash
-docker-compose run --rm backend-php symfony new . --version="7.2.*" --webapp
+docker-compose run --rm backend-php symfony new . --webapp
 ```
 
 **Option B : Version minimale (skeleton)**
 ```bash
-docker-compose run --rm backend-php symfony new . --version="7.2.*"
+docker-compose run --rm backend-php symfony new . --skeleton
 ```
 
 ### 6️⃣ Démarrer les containers
