@@ -151,20 +151,24 @@ init-symfony-webapp: ## Installer Symfony webapp
 	@echo "📦 Installation de Symfony webapp..."
 	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.* temp && cd temp && composer require webapp && cd .. && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
 	@echo "✅ Symfony webapp installé !"
+	@echo "🔧 Correction des permissions..."
+	$(MAKE) fix-perms
 
 init-symfony-skeleton: ## Installer Symfony skeleton
 	@echo "📦 Installation de Symfony skeleton..."
 	$(DOCKER_COMPOSE) run --rm $(PHP_CONTAINER) bash -c "composer create-project symfony/skeleton:7.* temp && cp -r temp/* . && cp temp/.env . 2>/dev/null || true && rm -rf temp"
 	@echo "✅ Symfony skeleton installé !"
+	@echo "🔧 Correction des permissions..."
+	$(MAKE) fix-perms
 
-setup: build up composer-install db-create db-migrate fix-perm ## Installation complète du projet (après avoir installé Symfony)
+setup: build up composer-install db-create db-migrate fix-perms ## Installation complète du projet (après avoir installé Symfony)
 	@echo ""
 	@echo "✅ Installation terminée !"
 	@echo "📝 N'oublie pas de configurer .env"
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-webapp: build init-symfony-webapp up composer-install db-create fix-perm ## Première installation webapp (clone + Symfony)
+first-install-webapp: build init-symfony-webapp up composer-install db-create fix-perms ## Première installation webapp (clone + Symfony)
 	@echo ""
 	@echo "✅ Symfony webapp installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
@@ -172,7 +176,7 @@ first-install-webapp: build init-symfony-webapp up composer-install db-create fi
 	@echo "🌐 Application: http://localhost:8080"
 	@echo "🗄️ pgAdmin: http://localhost:5050"
 
-first-install-skeleton: build init-symfony-skeleton up composer-install db-create fix-perm ## Première installation skeleton (clone + Symfony)
+first-install-skeleton: build init-symfony-skeleton up composer-install db-create fix-perms ## Première installation skeleton (clone + Symfony)
 	@echo ""
 	@echo "✅ Symfony skeleton installé et containers démarrés !"
 	@echo "📝 Édite .env avec tes valeurs"
