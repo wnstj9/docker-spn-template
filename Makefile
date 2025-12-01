@@ -147,16 +147,53 @@ test-coverage: ## Tests avec couverture de code
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) php bin/phpunit --coverage-html var/coverage
 
 ## —— 🚀 Installation ——————————————————————————————————————————————————————
-setup: build up fix-perms composer-install ## Installation complete du projet (Symfony deja installe)
+# Fonction pour afficher une barre de progression
+define show_progress
+	@printf "\033[1;36m"
+	@printf "["
+	@for i in $$(seq 1 $(1)); do printf "="; done
+	@for i in $$(seq 1 $$((50-$(1)))); do printf " "; done
+	@printf "]\033[0m "
+	@printf "\033[1;32m%3d%%\033[0m " $$(($(1)*2))
+	@printf "$(2)\n"
+endef
+
+setup: ## Installation complete du projet (Symfony deja installe)
 	@echo ""
-	@echo "==> Installation terminee !"
+	@printf "\033[1;34m"
+	@echo "=========================================="
+	@echo "  Installation du projet Symfony"
+	@echo "=========================================="
+	@printf "\033[0m"
+	@echo ""
+	$(call show_progress,10,[1/5] Building Docker images...)
+	@$(MAKE) build -s
+	$(call show_progress,20,[2/5] Starting containers...)
+	@$(MAKE) up -s
+	$(call show_progress,30,[3/5] Fixing permissions...)
+	@$(MAKE) fix-perms -s
+	$(call show_progress,40,[4/5] Installing dependencies...)
+	@$(MAKE) composer-install -s
+	$(call show_progress,50,[5/5] Setup complete!)
+	@echo ""
+	@printf "\033[1;32m"
+	@echo "=========================================="
+	@echo "  Installation terminee !"
+	@echo "=========================================="
+	@printf "\033[0m"
+	@echo ""
+	@printf "\033[1;33m"
 	@echo "==> Application: http://localhost:8080"
 	@echo "==> pgAdmin: http://localhost:5050"
+	@printf "\033[0m"
 	@echo ""
 	@echo "==> Pour ajouter des fonctionnalites :"
+	@printf "\033[1;35m"
 	@echo "    make upgrade-webapp    # Site web (Twig, Formulaires, etc.)"
 	@echo "    make upgrade-api       # API REST (API Platform)"
 	@echo "    make db-create         # Creer la base de donnees"
+	@printf "\033[0m"
+	@echo ""
 
 upgrade-webapp: ## Passer de skeleton a webapp (installe Doctrine, Twig, etc.)
 	@echo "==> Installation du pack webapp..."
