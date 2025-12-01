@@ -21,7 +21,7 @@ Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Dock
 ## 📦 Stack technique
 
 - **PHP** 8.4-FPM avec Xdebug
-- **Symfony** 8 skeleton (déjà installé !)
+- **Symfony** 8.0 skeleton
 - **PostgreSQL** 18
 - **pgAdmin** 4 (interface web pour PostgreSQL)
 - **Nginx** 1.27+
