@@ -68,12 +68,19 @@ Template prêt à l'emploi pour démarrer rapidement un projet Symfony avec Dock
 git clone https://github.com/teowaep/docker-spn-template.git mon-projet
 cd mon-projet
 
-# 2. Configurer l'environnement
+# 2. Supprimer l'historique Git du template
+rm -rf .git
+git init
+
+# 3. Configurer l'environnement
 cp .env.example .env
 nano .env  # Remplis POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
 
-# 3. Démarrer tout !
+# 4. Démarrer tout !
 make setup
+
+# 5. Lancer le terminal
+make bash
 ```
 
 **C'est tout ! 🎉** Ton projet est prêt à **http://localhost:8080**
